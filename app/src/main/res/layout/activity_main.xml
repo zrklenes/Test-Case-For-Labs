@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/homepagebg"
+    tools:context=".view.MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/framecontainer"
+        ></FrameLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomappbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomnavigationbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:labelVisibilityMode="unlabeled"
+            android:layout_marginRight="16dp"
+            android:background="@android:color/transparent"
+            app:menu="@menu/bottom_nav_menu" />
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addpost"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/black"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="10dp"
+        android:onClick="NextPage"
+        android:rotation="120"
+        app:cornerRadius="25dp"
+        app:icon="@drawable/add"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="25dp"
+        app:iconTint="@color/white"
+        app:layout_anchor="@id/bottomappbar"
+        app:layout_anchorGravity="center"
+        app:rippleColor="#fff" />
+
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/frameforstory"
+        ></FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

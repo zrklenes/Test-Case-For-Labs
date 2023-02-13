@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/mHome"
+        android:title="Home"
+        android:icon="@drawable/menuhome"/>
+
+    <item android:id="@+id/mComment"
+        android:title="Comments"
+        android:icon="@drawable/menucomment"/>
+
+    <item android:id="@+id/mNewPost"
+        android:title="New Post"
+        />
+
+    <item android:id="@+id/mLike"
+        android:title="Likes"
+        android:icon="@drawable/pageheart"/>
+
+    <item android:id="@+id/mProfile"
+        android:title="Profile"
+        android:icon="@drawable/menuuser"/>
+
+
+</menu>
