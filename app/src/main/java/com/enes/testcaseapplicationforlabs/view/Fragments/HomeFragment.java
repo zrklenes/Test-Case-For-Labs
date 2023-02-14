@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.enes.testcaseapplicationforlabs.R;
 import com.enes.testcaseapplicationforlabs.adapters.FeedAdapter;
 import com.enes.testcaseapplicationforlabs.adapters.PostAdapter;
+import com.enes.testcaseapplicationforlabs.adapters.ProfilePostAdapter;
 import com.enes.testcaseapplicationforlabs.models.Feed;
 import com.enes.testcaseapplicationforlabs.models.Post;
+import com.enes.testcaseapplicationforlabs.viewmodels.HomeViewModel;
+import com.enes.testcaseapplicationforlabs.viewmodels.SaveViewModel;
 
 import java.util.List;
 
@@ -28,27 +33,9 @@ public class HomeFragment extends Fragment  {
     private int mPage;
     int ErrorCount;
     ImageView notification;
-
-    Feed[] myFeedData = new Feed[] {
-            new Feed("Add Story",false,0, R.drawable.addstory),
-            new Feed("Mehmet Zorkol",true,1, R.drawable.profile1),
-            new Feed("Ahmet Zorkol",true,1, R.drawable.profile2),
-            new Feed("Ceren Zorkol",true,1, R.drawable.profile3),
-            new Feed("Ceren Zorkol",false,1, R.drawable.profile4),
-            new Feed("Ceren Zorkol",false,1, R.drawable.profile1),
-            new Feed("Ceren Zorkol",false,1, R.drawable.profile2),
-    };
-
-    Post[] myPostData = new Post[]{
-
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2),
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2)
-
-    };
-
-
+    FeedAdapter adapter;
+    PostAdapter adapterPost;
+    RecyclerView recyclerViewPost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +49,8 @@ public class HomeFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
+        HomeViewModel homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         notification = (ImageView) view.findViewById(R.id.notification);
@@ -69,8 +58,26 @@ public class HomeFragment extends Fragment  {
         notification.setTranslationY(-50);
         notification.animate().alpha(1f).translationYBy(75).setDuration(500);
 
+        homeViewModel.getSaveDatam().observe(getViewLifecycleOwner(), new Observer<Post[]>() {
+            @Override
+            public void onChanged(Post[] posts) {
+                adapterPost = new PostAdapter(posts);
+                recyclerViewPost.setAdapter(adapterPost);
+                adapterPost.notifyDataSetChanged();
+            }
+        });
 
-        FeedAdapter adapter = new FeedAdapter(myFeedData);
+        homeViewModel.getFeedDatam().observe(getViewLifecycleOwner(), new Observer<Feed[]>() {
+            @Override
+            public void onChanged(Feed[] feeds) {
+                adapter = new FeedAdapter(feeds);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
+
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),1);
         layoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
@@ -78,8 +85,7 @@ public class HomeFragment extends Fragment  {
         recyclerView.setAdapter(adapter);
 
 
-        RecyclerView recyclerViewPost = (RecyclerView) view.findViewById(R.id.recyclerViewPost);
-        PostAdapter adapterPost = new PostAdapter(myPostData);
+        recyclerViewPost = (RecyclerView) view.findViewById(R.id.recyclerViewPost);
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPost.setAdapter(adapterPost);

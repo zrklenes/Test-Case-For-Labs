@@ -123,6 +123,7 @@
 
                 <TextView
                     android:textStyle="bold"
+                    android:id="@+id/posts"
                     android:textSize="25sp"
                     android:textColor="#000"
                     android:layout_below="@+id/postname"
@@ -152,6 +153,7 @@
                         android:textStyle="bold"
                         android:textSize="25sp"
                         android:textColor="#000"
+                        android:id="@+id/followers"
                         android:layout_below="@+id/postname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -178,6 +180,7 @@
                     <TextView
                         android:textStyle="bold"
                         android:textSize="25sp"
+                        android:id="@+id/follows"
                         android:textColor="#000"
                         android:layout_below="@+id/postname"
                         android:layout_width="wrap_content"

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -13,7 +15,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.enes.testcaseapplicationforlabs.R;
 import com.enes.testcaseapplicationforlabs.adapters.ProfilePostAdapter;
 import com.enes.testcaseapplicationforlabs.models.Post;
+import com.enes.testcaseapplicationforlabs.viewmodels.SaveViewModel;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.List;
 
 public class SaveFragment extends Fragment {
 
@@ -22,19 +27,9 @@ public class SaveFragment extends Fragment {
     int ErrorCount;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    ProfilePostAdapter adapterPost;
 
 
-    Post[] myPostData = new Post[]{
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2),
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2),
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2),
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-            new Post("Mehmet Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile2,R.drawable.postimage2),
-            new Post("Enes Zorkol" , "2 Hours Ago" , 2283,394,291,1,1,R.drawable.profile1,R.drawable.postimage),
-
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,13 +43,24 @@ public class SaveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_detail_fragment, container, false);
-
+        SaveViewModel saveViewModel =
+                new ViewModelProvider(this).get(SaveViewModel.class);
 
         RecyclerView recyclerViewPost = (RecyclerView) view.findViewById(R.id.recyclerViewPost);
-        ProfilePostAdapter adapterPost = new ProfilePostAdapter(myPostData);
+
+        saveViewModel.getSaveDatam().observe(getViewLifecycleOwner(), new Observer<Post[]>() {
+            @Override
+            public void onChanged(Post[] posts) {
+                adapterPost = new ProfilePostAdapter(posts);
+                recyclerViewPost.setAdapter(adapterPost);
+                adapterPost.notifyDataSetChanged();
+            }
+        });
+
+
+
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(new GridLayoutManager(getContext(),2));
-        recyclerViewPost.setAdapter(adapterPost);
         recyclerViewPost.setNestedScrollingEnabled(false);
 
         return view;

@@ -41,7 +41,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
         final Feed myListData = listdata[position];
         holder.imageView.setImageResource(listdata[position].getImgId());
         if(listdata[position].getStatus()){
-            holder.imageView.setStrokeWidth(10.0F); 
+            holder.imageView.setStrokeWidth(10.0F);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

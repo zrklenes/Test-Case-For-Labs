@@ -2,11 +2,13 @@ package com.enes.testcaseapplicationforlabs.view.Fragments;
 
 import static androidx.fragment.app.FragmentManager.TAG;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +16,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +27,7 @@ import com.enes.testcaseapplicationforlabs.adapters.FeedAdapter;
 import com.enes.testcaseapplicationforlabs.adapters.PostAdapter;
 import com.enes.testcaseapplicationforlabs.models.Feed;
 import com.enes.testcaseapplicationforlabs.models.Post;
+import com.enes.testcaseapplicationforlabs.viewmodels.ProfileViewModel;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 
@@ -36,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private int mPage;
     int ErrorCount;
     private ViewPager viewPager;
+    TextView username,usertag,posts,followers,follows;
     private TabLayout tabLayout;
 
     @Override
@@ -50,30 +55,24 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_fragment, container, false);
+
+        ProfileViewModel profileViewModel =
+                new ViewModelProvider(this).get(ProfileViewModel.class);
+
         viewPager = view.findViewById(R.id.view_pager);
         tabLayout = view.findViewById(R.id.tab_layout);
-        NestedScrollView scroller = (NestedScrollView) view.findViewById(R.id.nestedscroll);
+        username = view.findViewById(R.id.username);
+        usertag = view.findViewById(R.id.usertag);
+        posts = view.findViewById(R.id.posts);
+        followers = view.findViewById(R.id.followers);
+        follows = view.findViewById(R.id.follows);
 
-        scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        profileViewModel.getUsername().observe(getViewLifecycleOwner(), username::setText);
+        profileViewModel.getUserlink().observe(getViewLifecycleOwner(), usertag::setText);
+        profileViewModel.getPosts().observe(getViewLifecycleOwner(), posts::setText);
+        profileViewModel.getFollowers().observe(getViewLifecycleOwner(), followers::setText);
+        profileViewModel.getFollows().observe(getViewLifecycleOwner(), follows::setText);
 
-                if (scrollY > oldScrollY) {
-                    Log.i(TAG, "Scroll DOWN");
-                }
-                if (scrollY < oldScrollY) {
-                    Log.i(TAG, "Scroll UP");
-                }
-
-                if (scrollY == 0) {
-                    Log.i(TAG, "TOP SCROLL");
-                }
-
-                if (scrollY == ( v.getMeasuredHeight() - v.getChildAt(0).getMeasuredHeight() )) {
-                    Log.i(TAG, "BOTTOM SCROLL");
-                }
-            }
-        });
 
         MyPhotosFragment myPhotosFragment = new MyPhotosFragment();
         SaveFragment saveFragment = new SaveFragment();
@@ -86,7 +85,7 @@ public class ProfileFragment extends Fragment {
         viewPager.setAdapter(viewPagerAdapter);
         //set the icons
         tabLayout.getTabAt(0).setIcon(R.drawable.myphotos);
-        tabLayout.getTabAt(1).setIcon(R.drawable.mysaved );
+        tabLayout.getTabAt(1).setIcon(R.drawable.mysaved);
 
         return view;
 
